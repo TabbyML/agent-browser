@@ -438,7 +438,7 @@ pub fn is_allowed_origin(origin: Option<&str>) -> bool {
     match origin {
         None => true,
         Some(o) => {
-            if o.starts_with("file://") {
+            if o.starts_with("file://") || o.starts_with("vscode-webview://") {
                 return true;
             }
             if let Ok(url) = url::Url::parse(o) {
@@ -463,6 +463,11 @@ mod tests {
     #[test]
     fn test_allowed_origin_file() {
         assert!(is_allowed_origin(Some("file:///path/to/file")));
+    }
+
+    #[test]
+    fn test_allowed_origin_vscode_webview() {
+        assert!(is_allowed_origin(Some("vscode-webview://abc123/index.html")));
     }
 
     #[test]
